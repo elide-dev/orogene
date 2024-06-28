@@ -3,6 +3,7 @@ source: tests/help.rs
 expression: "sub_md(\"logout\")"
 ---
 stderr:
+[32m INFO[0m Performing first-time setup...
 
 stdout:
 # oro logout
@@ -128,5 +129,3 @@ Can also be configured through the `NO_PROXY` environment variable, like `NO_PRO
 How many times to retry failed network operations
 
 \[default: 2]
-
-
