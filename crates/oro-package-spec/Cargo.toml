@@ -1,6 +1,6 @@
 [package]
 name = "oro-package-spec"
-version = "0.3.34"
+version = "0.3.35-elide"
 description = "NPM package specification parsing and manipulation."
 readme = "README.md"
 license = "Apache-2.0"
