@@ -265,7 +265,7 @@ where
     K: std::hash::Hash + Eq,
 {
     Object(HashMap<K, V>),
-    Value(Value),
+    Value(()),
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
