@@ -511,20 +511,43 @@ impl Orogene {
     }
 
     fn first_time_setup(&mut self) -> Result<()> {
-        // We skip first-time-setup operations in CI entirely.
-        if self.first_time && !is_ci::cached() {
-            tracing::info!("Performing first-time setup...");
-            if let Some(config_path) = self.config.clone().or_else(|| {
-                ProjectDirs::from("", "", "orogene")
-                    .map(|p| p.config_dir().to_owned().join("oro.kdl"))
-            }) {
+        if let Some(config_path) = self.config.clone().or_else(|| {
+            ProjectDirs::from("", "", "orogene")
+                .map(|p| p.config_dir().to_owned().join("oro.kdl"))
+        }) {
+            let config_dir = config_path.parent().expect("must have parent");
+            if !config_dir.exists() {
+                std::fs::create_dir_all(config_dir).unwrap();
+            }
+            let mut config: KdlDocument = std::fs::read_to_string(&config_path)
+                .unwrap_or_default()
+                .parse()?;
+
+            // restore first-time as global config
+            if let Some(opt) = config
+                .get_mut("options")
+                .unwrap()
+                .children()
+                .unwrap()
+                .get("first-time")
+            {
+                if let Some(val) = opt.get(0) {
+                    // we've been here before; bail
+                    if !val.as_bool().or(Some(false)).unwrap() {
+                        self.first_time = false;
+                        return Ok(())
+                    }
+                }
+            }
+
+            // We skip first-time-setup operations in CI entirely.
+            if self.first_time && !is_ci::cached() {
+                tracing::info!("Performing first-time setup...");
+
                 let config_dir = config_path.parent().expect("must have parent");
                 if !config_dir.exists() {
                     std::fs::create_dir_all(config_dir).unwrap();
                 }
-                let mut config: KdlDocument = std::fs::read_to_string(&config_path)
-                    .unwrap_or_default()
-                    .parse()?;
                 let telemetry_exists = config.query("options > telemetry")?.is_some();
                 if config.get("options").is_none() {
                     config.nodes_mut().push(KdlNode::new("options"));
@@ -581,7 +604,7 @@ impl Orogene {
                 }
                 std::fs::write(config_path, config.to_string()).into_diagnostic()?;
             }
-        }
+        };
         Ok(())
     }
 
