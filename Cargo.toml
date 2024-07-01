@@ -71,7 +71,7 @@ authors = ["Orogene Maintainers and Contributors"]
 edition = "2021"
 repository = "https://github.com/orogene/orogene"
 homepage = "https://orogene.dev"
-rust-version = "1.79"
+rust-version = "1.78"
 
 [features]
 default = ["error-reporting"]
