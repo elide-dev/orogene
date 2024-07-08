@@ -31,6 +31,7 @@ node-semver = { workspace = true }
 once_cell = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
+simd-json = { workspace = true, features = ["serde_impl", "known-key"] }
 ssri = { workspace = true }
 thiserror = { workspace = true }
 tracing = { workspace = true }
