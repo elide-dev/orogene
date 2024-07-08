@@ -61,6 +61,14 @@ term_grid = { workspace = true }
 term_size = { workspace = true }
 thiserror = { workspace = true }
 tikv-jemallocator = { workspace = true, optional = true }
+tokio = { workspace = true, default-features = false, features = [
+    "fs",
+    "parking_lot",
+    "io-std",
+    "io-util",
+    "rt-multi-thread",
+    "sync",
+] }
 tracing = { workspace = true }
 tracing-appender = { workspace = true }
 tracing-indicatif = { workspace = true }
@@ -75,10 +83,10 @@ authors = ["Orogene Maintainers and Contributors"]
 edition = "2021"
 repository = "https://github.com/orogene/orogene"
 homepage = "https://orogene.dev"
-rust-version = "1.78"
+rust-version = "1.79"
 
 [features]
-default = []
+default = ["error-reporting", "alloc-snmalloc"]
 alloc-bumpalo = ["bumpalo"]
 alloc-mimalloc = ["mimalloc"]
 alloc-snmalloc = ["snmalloc-rs"]
@@ -142,7 +150,7 @@ quote = "1.0.36"
 rand = { version = "0.8.5", default-features = false }
 reflink-copy = "0.1.18"
 regex = "1.10.5"
-reqwest = { version = "0.12.3", default-features = false, features = ["http2", "json", "gzip", "brotli", "stream", "rustls-tls", "rustls-tls-native-roots"] }
+reqwest = { version = "0.12.3", default-features = false, features = ["http2", "charset", "json", "gzip", "stream", "rustls-tls", "rustls-tls-webpki-roots"] }
 reqwest-middleware = "0.3.0"
 resvg = "0.29.0"  # needs attention
 rkyv = { version = "0.7.44", features = ["validation"] }
@@ -163,6 +171,14 @@ term_size = "0.3.2"
 test-case = "3.3.1"
 thiserror = "1.0.61"
 tikv-jemallocator = { version = "0.5.4", features = ["background_threads"] }
+tokio = { version = "1", default-features = false, features = [
+    "fs",
+    "parking_lot",
+    "io-std",
+    "io-util",
+    "rt-multi-thread",
+    "sync",
+] }
 tracing = "0.1.40"
 tracing-appender = "0.2.3"
 tracing-indicatif = "0.3.6"
@@ -219,9 +235,9 @@ path = "src/main.rs"
 split-debuginfo = "unpacked"
 
 [profile.release]
-lto = true
+lto = "thin"
 opt-level = 3
-strip = true
+strip = false
 debug = true
 incremental = false
 codegen-units = 1

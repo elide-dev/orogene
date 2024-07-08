@@ -11,7 +11,6 @@ use oro_common::{
 };
 use oro_package_spec::PackageSpec;
 use serde::{Deserialize, Serialize};
-
 use crate::error::{NassunError, Result};
 use crate::fetch::PackageFetcher;
 use crate::package::Package;
@@ -27,22 +26,47 @@ impl DirFetcher {
 }
 
 impl DirFetcher {
+    #[cfg(feature = "experimental-simd-json")]
     pub(crate) async fn corgi_manifest(&self, path: &Path) -> Result<Manifest> {
         let pkg_path = path.join("package.json");
-        let json = async_std::fs::read(&pkg_path)
+        let mut json = async_std::fs::read(&pkg_path)
             .await
             .map_err(|err| NassunError::DirReadError(err, pkg_path))?;
         let pkgjson: CorgiManifest =
-            serde_json::from_slice(&json[..]).map_err(NassunError::SerdeError)?;
+            simd_json::from_slice(&mut json[..]).map_err(NassunError::SerdeSimdError)?;
         Ok(Manifest::Corgi(Box::new(pkgjson)))
     }
+
+    #[cfg(not(feature = "experimental-simd-json"))]
+    pub(crate) async fn corgi_manifest(&self, path: &Path) -> Result<Manifest> {
+        let pkg_path = path.join("package.json");
+        let mut json = async_std::fs::read(&pkg_path)
+            .await
+            .map_err(|err| NassunError::DirReadError(err, pkg_path))?;
+        let pkgjson: CorgiManifest =
+            serde_json::from_slice(&mut json[..]).map_err(NassunError::SerdeSimdError)?;
+        Ok(Manifest::Corgi(Box::new(pkgjson)))
+    }
+
+    #[cfg(feature = "experimental-simd-json")]
+    pub(crate) async fn manifest(&self, path: &Path) -> Result<Manifest> {
+        let pkg_path = path.join("package.json");
+        let mut json = async_std::fs::read(&pkg_path)
+            .await
+            .map_err(|err| NassunError::DirReadError(err, pkg_path))?;
+        let pkgjson: OroManifest =
+            simd_json::from_slice(&mut json[..]).map_err(NassunError::SerdeSimdError)?;
+        Ok(Manifest::FullFat(Box::new(pkgjson)))
+    }
+
+    #[cfg(not(feature = "experimental-simd-json"))]
     pub(crate) async fn manifest(&self, path: &Path) -> Result<Manifest> {
         let pkg_path = path.join("package.json");
         let json = async_std::fs::read(&pkg_path)
             .await
             .map_err(|err| NassunError::DirReadError(err, pkg_path))?;
         let pkgjson: OroManifest =
-            serde_json::from_slice(&json[..]).map_err(NassunError::SerdeError)?;
+            serde_json::from_slice(&json[..]).map_err(NassunError::SerdeSimdError)?;
         Ok(Manifest::FullFat(Box::new(pkgjson)))
     }
 

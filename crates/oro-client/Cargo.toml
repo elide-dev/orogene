@@ -23,7 +23,7 @@ http = { workspace = true }
 indexmap = { workspace = true }
 miette = { workspace = true }
 percent-encoding = { workspace = true }
-reqwest = { workspace = true, features = ["json", "gzip", "stream"] }
+reqwest = { version = "0.12.3", default-features = false, features = ["http2", "charset", "json", "gzip", "stream", "rustls-tls", "rustls-tls-webpki-roots"] }
 reqwest-middleware = { workspace = true }
 reqwest-retry = { workspace = true }
 serde = { workspace = true }

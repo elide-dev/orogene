@@ -11,6 +11,10 @@ repository.workspace = true
 homepage.workspace = true
 rust-version.workspace = true
 
+[features]
+default = ["experimental-simd-json"]
+experimental-simd-json = ["simd-json"]
+
 [dependencies]
 oro-common = { version = "=0.3.35-elide", path = "../oro-common" }
 oro-client = { version = "=0.3.35-elide", path = "../oro-client" }
@@ -31,7 +35,7 @@ node-semver = { workspace = true }
 once_cell = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
-simd-json = { workspace = true, features = ["serde_impl", "known-key"] }
+simd-json = { workspace = true, features = ["serde_impl", "known-key"], optional = true }
 ssri = { workspace = true }
 thiserror = { workspace = true }
 tracing = { workspace = true }
@@ -45,10 +49,10 @@ test-case = { workspace = true }
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 async-tar-wasm = "0.4.2-wasm.1"
 async-process = { workspace = true }
-async-std = { workspace = true, features = ["attributes", "std"] }
+async-std = { workspace = true, features = ["attributes", "std", "tokio1"] }
 backon = { workspace = true }
 cacache = { workspace = true }
-flate2 = { workspace = true }
+flate2 = { workspace = true, features = ["zlib-ng"] }
 io_tee = { workspace = true }
 rkyv = { workspace = true, features = ["validation"] }
 tar = { workspace = true }
