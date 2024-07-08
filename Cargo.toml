@@ -49,6 +49,7 @@ is_ci = { workspace = true }
 is-terminal = { workspace = true }
 kdl = { workspace = true }
 miette = { workspace = true, features = ["fancy"] }
+mimalloc = { workspace = true }
 rand = { workspace = true, default_features = false }
 sentry = { workspace = true, optional = true }
 serde = { workspace = true, features = ["derive"] }
@@ -117,6 +118,7 @@ kdl = { git = "https://github.com/elide-tools/kdl-rs.git", rev = "b76df4f16ce805
 #kdl = { git = "https://github.com/elide-tools/kdl-rs.git", rev = "6044ef9776f24f45004c36d7628b1f5fbd83c8ad" }
 maplit = "1.0.2"
 miette = "7.2.0"
+mimalloc = "0.1.43"
 mockito = "1.4.0"
 node-semver = "2.1.0"
 nom = "7.1.3"
