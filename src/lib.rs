@@ -531,7 +531,7 @@ impl Orogene {
             {
                 if let Some(val) = opt.get(0) {
                     // we've been here before; bail
-                    if !val.as_bool().or(Some(false)).unwrap() {
+                    if !val.as_bool().unwrap_or(false) {
                         self.first_time = false;
                         return Ok(());
                     }

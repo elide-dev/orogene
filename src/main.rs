@@ -15,5 +15,5 @@ static ALLOC: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
 
 #[async_std::main]
 async fn main() -> Result<()> {
-    Ok(Orogene::load().await?)
+    Orogene::load().await
 }
