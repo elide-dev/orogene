@@ -94,7 +94,7 @@ use std::{
 #[cfg(feature = "error-reporting")]
 use std::{
     borrow::Cow,
-    panic::PanicInfo,
+    panic::PanicHookInfo as PanicInfo,
     sync::Arc,
 };
 use std::time::Instant;
