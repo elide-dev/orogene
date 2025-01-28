@@ -178,6 +178,7 @@ impl OroClientBuilder {
                     cache_key: None,
                     cache_mode_fn: None,
                     cache_bust: None,
+                    cache_status_headers: false,
                 },
             }));
         }
