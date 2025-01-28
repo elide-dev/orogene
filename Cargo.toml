@@ -86,7 +86,7 @@ homepage = "https://orogene.dev"
 rust-version = "1.79"
 
 [features]
-default = ["error-reporting", "alloc-snmalloc"]
+default = ["alloc-snmalloc"]
 alloc-bumpalo = ["bumpalo"]
 alloc-mimalloc = ["mimalloc"]
 alloc-snmalloc = ["snmalloc-rs"]
