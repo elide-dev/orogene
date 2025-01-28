@@ -22,7 +22,7 @@ futures = { workspace = true, features = ["io-compat"] }
 indexmap = { workspace = true }
 miette = { workspace = true }
 percent-encoding = { workspace = true }
-reqwest = { workspace = true, features = ["json", "gzip", "stream"] }
+reqwest = { workspace = true }
 reqwest-middleware = { workspace = true }
 reqwest-retry = { workspace = true }
 serde = { workspace = true }
