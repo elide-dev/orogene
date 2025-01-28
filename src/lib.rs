@@ -86,18 +86,14 @@
 //! [our contribution guide]: https://orogene.dev/CONTRIBUTING/
 //! [Apache 2.0 License]: https://github.com/orogene/orogene/blob/main/LICENSE
 
+use std::time::Instant;
+#[cfg(feature = "error-reporting")]
+use std::{borrow::Cow, panic::PanicHookInfo as PanicInfo, sync::Arc};
 use std::{
     collections::VecDeque,
     ffi::OsString,
     path::{Path, PathBuf},
 };
-#[cfg(feature = "error-reporting")]
-use std::{
-    borrow::Cow,
-    panic::PanicHookInfo as PanicInfo,
-    sync::Arc,
-};
-use std::time::Instant;
 
 use async_trait::async_trait;
 use clap::{Args, Command, CommandFactory, FromArgMatches as _, Parser, Subcommand};
@@ -515,8 +511,7 @@ impl Orogene {
 
     fn first_time_setup(&mut self) -> Result<()> {
         if let Some(config_path) = self.config.clone().or_else(|| {
-            ProjectDirs::from("", "", "orogene")
-                .map(|p| p.config_dir().to_owned().join("oro.kdl"))
+            ProjectDirs::from("", "", "orogene").map(|p| p.config_dir().to_owned().join("oro.kdl"))
         }) {
             let config_dir = config_path.parent().expect("must have parent");
             if !config_dir.exists() {
@@ -538,7 +533,7 @@ impl Orogene {
                     // we've been here before; bail
                     if !val.as_bool().or(Some(false)).unwrap() {
                         self.first_time = false;
-                        return Ok(())
+                        return Ok(());
                     }
                 }
             }
@@ -706,7 +701,11 @@ impl Orogene {
     }
 
     pub async fn load() -> Result<()> {
-        Self::init_and_run(Self::current_command(), std::env::args_os().collect::<Vec<_>>()).await
+        Self::init_and_run(
+            Self::current_command(),
+            std::env::args_os().collect::<Vec<_>>(),
+        )
+        .await
     }
 
     pub async fn init_and_run(command: Command, args: Vec<OsString>) -> Result<()> {
@@ -728,7 +727,8 @@ impl Orogene {
         mut oro: Orogene,
         config: OroConfig,
         command: Command,
-        mut args: Vec<OsString>) -> Result<()> {
+        mut args: Vec<OsString>,
+    ) -> Result<()> {
         Self::layer_command_args(&command, &mut args, &config)?;
         let log_file = oro
             .cache

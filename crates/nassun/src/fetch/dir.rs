@@ -1,6 +1,10 @@
 use std::collections::HashMap;
 use std::path::Path;
 
+use crate::error::{NassunError, Result};
+use crate::fetch::PackageFetcher;
+use crate::package::Package;
+use crate::resolver::PackageResolution;
 use async_std::sync::Arc;
 use async_trait::async_trait;
 use futures::io::AsyncRead;
@@ -11,10 +15,6 @@ use oro_common::{
 };
 use oro_package_spec::PackageSpec;
 use serde::{Deserialize, Serialize};
-use crate::error::{NassunError, Result};
-use crate::fetch::PackageFetcher;
-use crate::package::Package;
-use crate::resolver::PackageResolution;
 
 #[derive(Debug)]
 pub(crate) struct DirFetcher;

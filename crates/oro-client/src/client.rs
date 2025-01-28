@@ -1,9 +1,6 @@
-#[cfg(not(target_arch = "wasm32"))]
-use std::path::{Path, PathBuf};
-use std::{collections::HashMap, sync::Arc};
+use http_cache_reqwest::HttpCacheOptions;
 #[cfg(not(target_arch = "wasm32"))]
 use http_cache_reqwest::{CACacheManager, Cache, CacheMode, HttpCache};
-use http_cache_reqwest::HttpCacheOptions;
 #[cfg(target_arch = "wasm32")]
 use reqwest::Client;
 #[cfg(not(target_arch = "wasm32"))]
@@ -12,6 +9,9 @@ use reqwest::ClientBuilder;
 use reqwest::{NoProxy, Proxy};
 use reqwest_middleware::ClientWithMiddleware;
 use reqwest_retry::{policies::ExponentialBackoff, RetryTransientMiddleware};
+#[cfg(not(target_arch = "wasm32"))]
+use std::path::{Path, PathBuf};
+use std::{collections::HashMap, sync::Arc};
 use url::Url;
 
 #[cfg(not(target_arch = "wasm32"))]
