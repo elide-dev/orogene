@@ -225,7 +225,7 @@ pr-run-mode = "plan"
 allow-dirty = ["msi"]
 
 [build-dependencies]
-embed-resource = "1.3.3"
+embed-resource = "3.0.1"
 
 [[bin]]
 name = "oro"
