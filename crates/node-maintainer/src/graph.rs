@@ -19,18 +19,6 @@ use crate::{error::NodeMaintainerError, Lockfile, LockfileNode};
 #[cfg(debug_assertions)]
 use NodeMaintainerError::GraphValidationError;
 
-#[derive(Debug, Hash, PartialEq, Eq)]
-pub(crate) struct DemotionTarget {
-    /// Index of the target ancestor node that should hold the demoted copy.
-    pub(crate) target_idx: NodeIndex,
-
-    /// Index of the dependent node
-    pub(crate) dependent_idx: NodeIndex,
-
-    /// Index of the edge between dependency and dependent
-    pub(crate) edge_idx: EdgeIndex,
-}
-
 #[derive(Debug, Clone)]
 pub struct Node {
     /// Index of this Node inside its [`Graph`].

@@ -90,7 +90,7 @@ use std::{
     borrow::Cow,
     collections::VecDeque,
     ffi::OsString,
-    panic::PanicInfo,
+    panic::PanicHookInfo as PanicInfo,
     path::{Path, PathBuf},
     sync::Arc,
 };
