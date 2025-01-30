@@ -133,7 +133,7 @@ junction = "1.1.0"
 kdl = { git = "https://github.com/elide-tools/kdl-rs.git", rev = "b76df4f16ce805798e6d513a6daedf97f6d28e5d" }
 #kdl = { git = "https://github.com/elide-tools/kdl-rs.git", rev = "6044ef9776f24f45004c36d7628b1f5fbd83c8ad" }
 maplit = "1.0.2"
-miette = "7.2.0"
+miette = "7.4.0"
 mimalloc = { version = "0.1.43" }
 mockito = "1.4.0"
 node-semver = "2.1.0"
