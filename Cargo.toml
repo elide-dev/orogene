@@ -150,7 +150,7 @@ quote = "1.0.36"
 rand = { version = "0.9.0", default-features = false }
 reflink-copy = "0.1.18"
 regex = "1.10.5"
-reqwest = { version = "0.12.3", default-features = true, features = ["native-tls-vendored", "http2", "charset", "json", "gzip", "stream"] }
+reqwest = { version = "0.12.3", default-features = true, features = ["native-tls", "http2", "charset", "json", "gzip", "stream"] }
 reqwest-middleware = "0.4.0"
 resvg = "0.29.0"
 rkyv = { version = "0.8.10" }
@@ -235,10 +235,10 @@ path = "src/main.rs"
 split-debuginfo = "unpacked"
 
 [profile.release]
-lto = "thin"
-opt-level = 3
+lto = true
+opt-level = "s"
 strip = false
-debug = true
+debug = false
 incremental = false
 codegen-units = 1
 split-debuginfo = "unpacked"
