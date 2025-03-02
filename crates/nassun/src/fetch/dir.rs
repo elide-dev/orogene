@@ -264,7 +264,7 @@ mod test {
     use super::*;
     use std::{fs::File, io::Write, path::PathBuf};
 
-    use tempfile::{tempdir, TempDir};
+    use tempfile::{TempDir, tempdir};
 
     use crate::error::IoContext;
 

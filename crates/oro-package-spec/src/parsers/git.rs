@@ -16,7 +16,8 @@ pub(crate) fn git_spec(input: &str) -> IResult<&str, PackageSpec, SpecParseError
     context(
         "git package",
         map(alt((git_shorthand, git_url, git_scp)), PackageSpec::Git),
-    ).parse(input)
+    )
+    .parse(input)
 }
 
 /// `git-shorthand := [ hosted-git-prefix ] not('/')+ '/' repo`
@@ -31,7 +32,7 @@ fn git_shorthand(input: &str) -> IResult<&str, GitInfo, SpecParseError<&str>> {
             host: maybe_host.unwrap_or(GitHost::GitHub),
             owner: owner.into(),
             repo: repo.into(),
-            committish: committish.map(String::from),
+            committish,
             semver,
             requested: None,
         },
@@ -46,7 +47,8 @@ fn hosted_git_prefix(input: &str) -> IResult<&str, GitHost, SpecParseError<&str>
             tag(":"),
         ),
         |host: &str| host.parse(),
-    ).parse(input)
+    )
+    .parse(input)
 }
 
 fn committish(input: &str) -> IResult<&str, (Option<String>, Option<Range>), SpecParseError<&str>> {
@@ -58,7 +60,8 @@ fn committish(input: &str) -> IResult<&str, (Option<String>, Option<Range>), Spe
             }),
             map(map_res(rest, util::no_url_encode), |com| (Some(com), None)),
         )),
-    )).parse(input)?;
+    ))
+    .parse(input)?;
     Ok((
         input,
         if let Some((maybe_comm, maybe_semver)) = hash {
@@ -78,7 +81,8 @@ fn git_url(input: &str) -> IResult<&str, GitInfo, SpecParseError<&str>> {
     let (input, url) = preceded(
         alt((tag("git+"), peek(tag("git://")))),
         map_res(take_till1(|c| c == '#'), Url::parse),
-    ).parse(input)?;
+    )
+    .parse(input)?;
     let (input, (committish, semver)) = committish(input)?;
     match url.host_str() {
         Some(host @ "github.com")

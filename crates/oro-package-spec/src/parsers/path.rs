@@ -9,8 +9,8 @@ use nom::multi::{many0, many1};
 use nom::sequence::{delimited, preceded};
 use nom::{IResult, Parser};
 
-use crate::error::{SpecErrorKind, SpecParseError};
 use crate::PackageSpec;
+use crate::error::{SpecErrorKind, SpecParseError};
 
 /// path := ( relative-dir | absolute-dir )
 pub(crate) fn path_spec(input: &str) -> IResult<&str, PackageSpec, SpecParseError<&str>> {
@@ -19,7 +19,8 @@ pub(crate) fn path_spec(input: &str) -> IResult<&str, PackageSpec, SpecParseErro
         map(alt((relative_path, absolute_path)), |p| PackageSpec::Dir {
             path: p,
         }),
-    ).parse(input)
+    )
+    .parse(input)
 }
 
 /// relative-path := [ '.' ] '.' [path-sep] .*
@@ -30,7 +31,8 @@ fn relative_path(input: &str) -> IResult<&str, PathBuf, SpecParseError<&str>> {
             recognize((tag("."), opt(tag(".")), many0(path_sep), rest)),
             PathBuf::from,
         ),
-    ).parse(input)
+    )
+    .parse(input)
 }
 
 /// absolute-path := [ alpha ':' ] path-sep+ [ '?' path-sep+ ] .*
@@ -61,7 +63,8 @@ fn absolute_path(input: &str) -> IResult<&str, PathBuf, SpecParseError<&str>> {
             )),
             PathBuf::from,
         ),
-    ).parse(input)
+    )
+    .parse(input)
 }
 
 /// path-sep := ( '/' | '\' )

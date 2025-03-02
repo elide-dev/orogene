@@ -1,6 +1,6 @@
 use indexmap::IndexMap;
 use kdl::{KdlDocument, KdlNode};
-use nassun::{client::Nassun, package::Package, PackageResolution};
+use nassun::{PackageResolution, client::Nassun, package::Package};
 use node_semver::Version;
 use oro_common::CorgiManifest;
 use oro_package_spec::PackageSpec;
@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 use ssri::Integrity;
 use unicase::UniCase;
 
-use crate::{error::NodeMaintainerError, graph::DepType, IntoKdl};
+use crate::{IntoKdl, error::NodeMaintainerError, graph::DepType};
 
 /// A representation of a resolved lockfile.
 #[derive(Default, Debug, Clone, PartialEq, Eq)]

@@ -39,14 +39,16 @@ pub(crate) fn npm_spec(input: &str) -> IResult<&str, PackageSpec, SpecParseError
                 }
             },
         ),
-    ).parse(input)
+    )
+    .parse(input)
 }
 
 fn version_req(input: &str) -> IResult<&str, VersionSpec, SpecParseError<&str>> {
     context(
         "version requirement",
         alt((semver_version, semver_range, version_tag)),
-    ).parse(input)
+    )
+    .parse(input)
 }
 
 fn semver_version(input: &str) -> IResult<&str, VersionSpec, SpecParseError<&str>> {
@@ -65,5 +67,6 @@ fn version_tag(input: &str) -> IResult<&str, VersionSpec, SpecParseError<&str>> 
         map(map_res(take_till1(|_| false), util::no_url_encode), |t| {
             VersionSpec::Tag(t.into())
         }),
-    ).parse(input)
+    )
+    .parse(input)
 }

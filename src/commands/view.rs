@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use clap::Args;
 use colored::*;
-use humansize::{file_size_opts, FileSize};
+use humansize::{FileSize, file_size_opts};
 use miette::{IntoDiagnostic, Result, WrapErr};
 use oro_common::{Bin, DeprecationInfo, Manifest, NpmUser, Person, PersonField, VersionMetadata};
 use term_grid::{Cell, Direction, Filling, Grid, GridOptions};
@@ -197,11 +197,7 @@ impl OroCommand for ViewCmd {
                         PersonField::Str(string) => {
                             println!("- {}", string.yellow());
                         }
-                        PersonField::Obj(Person {
-                            name,
-                            email,
-                            url,
-                        }) => {
+                        PersonField::Obj(Person { name, email, url }) => {
                             print!("-");
                             if let Some(name) = name {
                                 print!(" {name}");

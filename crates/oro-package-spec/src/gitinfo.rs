@@ -6,9 +6,9 @@ use nom::combinator::all_consuming;
 use nom::{Err, Parser};
 use url::Url;
 
+use crate::PackageSpec;
 use crate::error::{PackageSpecError, SpecErrorKind};
 use crate::parsers::git;
-use crate::PackageSpec;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum GitHost {
@@ -32,7 +32,7 @@ impl FromStr for GitHost {
                     input: s.into(),
                     offset: 0,
                     kind: SpecErrorKind::InvalidGitHost(s.into()),
-                })
+                });
             }
         })
     }
@@ -103,10 +103,7 @@ impl GitInfo {
         match self {
             GitInfo::Url { .. } | Ssh { .. } => None,
             Hosted {
-                host,
-                owner,
-                repo,
-                ..
+                host, owner, repo, ..
             } => Some(match host {
                 GitHub => format!("git@github.com:{owner}/{repo}.git"),
                 Gist => format!("git@gist.github.com:/{repo}"),
@@ -123,10 +120,7 @@ impl GitInfo {
         match self {
             GitInfo::Url { .. } | Ssh { .. } => None,
             Hosted {
-                host,
-                owner,
-                repo,
-                ..
+                host, owner, repo, ..
             } => Some(match host {
                 GitHub => format!("https://github.com/{owner}/{repo}.git"),
                 Gist => format!("https://gist.github.com/{repo}.git"),

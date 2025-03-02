@@ -8,7 +8,7 @@ use reqwest::ClientBuilder;
 #[cfg(not(target_arch = "wasm32"))]
 use reqwest::{NoProxy, Proxy};
 use reqwest_middleware::ClientWithMiddleware;
-use reqwest_retry::{policies::ExponentialBackoff, RetryTransientMiddleware};
+use reqwest_retry::{RetryTransientMiddleware, policies::ExponentialBackoff};
 #[cfg(not(target_arch = "wasm32"))]
 use std::path::{Path, PathBuf};
 use std::{collections::HashMap, sync::Arc};

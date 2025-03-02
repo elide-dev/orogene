@@ -5,9 +5,9 @@ use nom::error::context;
 use nom::sequence::preceded;
 use nom::{IResult, Parser};
 
+use crate::PackageSpec;
 use crate::error::SpecParseError;
 use crate::parsers::{git, npm, path, util};
-use crate::PackageSpec;
 
 // alias_spec := [ [ '@' ], not('/')+ '/' ] not('@/')+ '@' prefixed-package-arg
 pub(crate) fn alias_spec(input: &str) -> IResult<&str, PackageSpec, SpecParseError<&str>> {
@@ -33,7 +33,8 @@ pub(crate) fn alias_spec(input: &str) -> IResult<&str, PackageSpec, SpecParseErr
                 }
             },
         ),
-    ).parse(input)
+    )
+    .parse(input)
 }
 
 /// prefixed_package-arg := ( "npm:" npm-pkg ) | ( [ "file:" ] path )
@@ -46,7 +47,8 @@ fn prefixed_package_spec(input: &str) -> IResult<&str, PackageSpec, SpecParseErr
             git::git_spec,
             preceded(tag("npm:"), npm::npm_spec),
         )),
-    ).parse(input)
+    )
+    .parse(input)
 }
 
 fn scope(input: &str) -> IResult<&str, String, SpecParseError<&str>> {
@@ -67,5 +69,6 @@ fn scope(input: &str) -> IResult<&str, String, SpecParseError<&str>> {
                 out
             },
         ),
-    ).parse(input)
+    )
+    .parse(input)
 }

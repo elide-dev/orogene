@@ -118,9 +118,7 @@ impl fmt::Display for PackageSpec {
             Dir { path } => write!(f, "{}", path.display()),
             Git(info) => write!(f, "{info}"),
             Npm {
-                name,
-                requested,
-                ..
+                name, requested, ..
             } => {
                 write!(f, "{name}")?;
                 if let Some(req) = requested {
