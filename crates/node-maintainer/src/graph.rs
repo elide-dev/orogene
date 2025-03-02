@@ -398,7 +398,7 @@ impl Graph {
             peer_dependencies: peer_deps,
             optional_dependencies: opt_deps,
             integrity: match node.package.resolved() {
-                PackageResolution::Npm { ref integrity, .. } => integrity.clone(),
+                PackageResolution::Npm { integrity, .. } => integrity.clone(),
                 _ => None,
             },
         })

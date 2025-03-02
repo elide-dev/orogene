@@ -3,7 +3,7 @@ use std::str::FromStr;
 
 use node_semver::Range;
 use nom::combinator::all_consuming;
-use nom::Err;
+use nom::{Err, Parser};
 use url::Url;
 
 use crate::error::{PackageSpecError, SpecErrorKind};
@@ -103,9 +103,9 @@ impl GitInfo {
         match self {
             GitInfo::Url { .. } | Ssh { .. } => None,
             Hosted {
-                ref host,
-                ref owner,
-                ref repo,
+                host,
+                owner,
+                repo,
                 ..
             } => Some(match host {
                 GitHub => format!("git@github.com:{owner}/{repo}.git"),
@@ -123,9 +123,9 @@ impl GitInfo {
         match self {
             GitInfo::Url { .. } | Ssh { .. } => None,
             Hosted {
-                ref host,
-                ref owner,
-                ref repo,
+                host,
+                owner,
+                repo,
                 ..
             } => Some(match host {
                 GitHub => format!("https://github.com/{owner}/{repo}.git"),
@@ -143,10 +143,10 @@ impl GitInfo {
         match self {
             GitInfo::Url { .. } | Ssh { .. } => None,
             Hosted {
-                ref host,
-                ref owner,
-                ref repo,
-                ref committish,
+                host,
+                owner,
+                repo,
+                committish,
                 ..
             } => committish
                 .as_ref()
@@ -237,7 +237,7 @@ where
     I: AsRef<str>,
 {
     let input = input.as_ref();
-    match all_consuming(git::git_spec)(input) {
+    match all_consuming(git::git_spec).parse(input) {
         Ok((_, PackageSpec::Git(arg))) => Ok(arg),
         Ok(_) => unreachable!("This should only return git specs"),
         Err(err) => Err(match err {

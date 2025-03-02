@@ -198,9 +198,9 @@ impl OroCommand for ViewCmd {
                             println!("- {}", string.yellow());
                         }
                         PersonField::Obj(Person {
-                            ref name,
-                            ref email,
-                            ref url,
+                            name,
+                            email,
+                            url,
                         }) => {
                             print!("-");
                             if let Some(name) = name {
