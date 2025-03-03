@@ -95,7 +95,7 @@ error-reporting = ["sentry"]
 
 [workspace.dependencies]
 anyhow = "1.0.96"
-async-compression = "0.4.20"
+async-compression = { version = "0.4.12", features = ["bzip2", "gzip", "xz", "zstd"] }
 async-process = "2.3.0"
 async-std = "1.13.0"
 async-trait = "0.1.86"
