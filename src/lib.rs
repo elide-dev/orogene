@@ -613,7 +613,7 @@ impl Orogene {
         tracing::info!("Orogene is able to collect anonymous usage statistics and");
         tracing::info!("crash reports to help the team improve the tool.");
         tracing::info!(
-            "Anonymous, aggregate metrics are publicly available (see `oro telemetry`),"
+            "Anonymous, aggregate metrics are publicly available (see `elide telemetry`),"
         );
         tracing::info!("and no personally identifiable information is collected.");
         tracing::info!("This is entirely opt-in, but we would appreciate it if you considered it!");
@@ -635,7 +635,7 @@ impl Orogene {
         if let Some(dsn) = self
             .sentry_dsn
             .as_deref()
-            .or_else(|| option_env!("OROGENE_SENTRY_DSN"))
+            .or_else(|| option_env!("ELIDE_SENTRY_DSN"))
         {
             let ret = sentry::init(
                 sentry::ClientOptions {
@@ -644,7 +644,7 @@ impl Orogene {
                     server_name: None,
                     sample_rate: 0.1,
                     user_agent: Cow::from(format!(
-                        "orogene@{} ({}/{})",
+                        "elide/orogene@{} ({}/{})",
                         env!("CARGO_PKG_VERSION"),
                         std::env::consts::OS,
                         std::env::consts::ARCH,
@@ -666,7 +666,7 @@ impl Orogene {
                                         filename: log_file
                                             .file_name()
                                             .map(|f| f.to_string_lossy().to_string())
-                                            .unwrap_or_else(|| "oro-debug.log".into()),
+                                            .unwrap_or_else(|| "elide-oro-debug.log".into()),
                                         content_type: Some("text/plain".into()),
                                         buffer: std::fs::read(log_file).unwrap_or_default(),
                                         ty: None,
