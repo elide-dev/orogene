@@ -75,7 +75,7 @@ homepage = "https://orogene.dev"
 rust-version = "1.85"
 
 [features]
-default = ["error-reporting"]
+default = ["error-reporting", "mimalloc"]
 mimalloc = ["dep:mimalloc"]
 error-reporting = ["sentry"]
 experimental-simdjson = ["nassun/experimental-simdjson"]
