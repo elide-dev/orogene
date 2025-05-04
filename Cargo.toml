@@ -60,7 +60,7 @@ term_size = { workspace = true }
 thiserror = { workspace = true }
 tracing = { workspace = true }
 tracing-appender = { workspace = true }
-tracing-indicatif = { workspace = true }
+tracing-indicatif = { workspace = true, optional = true }
 tracing-subscriber = { workspace = true, features = ["env-filter"] }
 url = { workspace = true }
 
@@ -75,10 +75,11 @@ homepage = "https://orogene.dev"
 rust-version = "1.85"
 
 [features]
-default = ["error-reporting", "mimalloc"]
+default = ["error-reporting", "mimalloc", "tracing"]
 mimalloc = ["dep:mimalloc"]
 error-reporting = ["sentry"]
 experimental-simdjson = ["nassun/experimental-simdjson"]
+tracing = ["dep:tracing-indicatif"]
 
 [workspace.dependencies]
 anyhow = "1.0.96"

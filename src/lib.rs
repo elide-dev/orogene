@@ -104,7 +104,6 @@ use kdl::{KdlDocument, KdlNode, KdlValue};
 use miette::{IntoDiagnostic, Result};
 use oro_config::{OroConfig, OroConfigLayerExt, OroConfigOptions};
 use tracing_appender::non_blocking::WorkerGuard;
-use tracing_indicatif::IndicatifLayer;
 use tracing_subscriber::{
     EnvFilter,
     filter::{Directive, LevelFilter, Targets},
@@ -112,6 +111,9 @@ use tracing_subscriber::{
     prelude::*,
 };
 use url::Url;
+
+#[cfg(feature = "tracing")]
+use tracing_indicatif::IndicatifLayer;
 
 use commands::OroCommand;
 
@@ -311,6 +313,12 @@ pub struct Orogene {
 }
 
 impl Orogene {
+    #[cfg(not(feature = "tracing"))]
+    fn setup_logging(&self, _log_file: Option<&Path>) -> Result<Option<WorkerGuard>> {
+        Ok(None)
+    }
+
+    #[cfg(feature = "tracing")]
     fn setup_logging(&self, log_file: Option<&Path>) -> Result<Option<WorkerGuard>> {
         let builder = EnvFilter::builder();
         let filter = if self.quiet {
@@ -751,6 +759,8 @@ impl Orogene {
             .clone()
             .or_else(|| config.get::<String>("cache").ok().map(PathBuf::from))
             .map(|c| c.join("_logs").join(log_file_name()));
+
+        #[cfg(feature = "tracing")]
         let _logging_guard = oro.setup_logging(log_file.as_deref())?;
         oro.first_time_setup()?;
         #[cfg(feature = "error-reporting")]
