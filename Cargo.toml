@@ -60,7 +60,7 @@ term_size = { workspace = true }
 thiserror = { workspace = true }
 tracing = { workspace = true }
 tracing-appender = { workspace = true }
-tracing-indicatif = { workspace = true, optional = true }
+tracing-indicatif = { workspace = true }
 tracing-subscriber = { workspace = true, features = ["env-filter"] }
 url = { workspace = true }
 
@@ -79,7 +79,7 @@ default = ["error-reporting", "mimalloc", "tracing"]
 mimalloc = ["dep:mimalloc"]
 error-reporting = ["sentry"]
 experimental-simdjson = ["nassun/experimental-simdjson"]
-tracing = ["dep:tracing-indicatif"]
+tracing = []
 
 [workspace.dependencies]
 anyhow = "1.0.96"
@@ -136,7 +136,8 @@ quote = "1.0.38"
 rand = { version = "0.9.0", features = ["thread_rng"] , default-features = false }
 reflink-copy = "0.1.24"
 regex = "1.11.1"
-reqwest = "0.12.12"
+#reqwest = "0.12.12"
+reqwest = { version = "0.12.12", features = ["deflate", "gzip", "brotli", "h2", "native-tls-vendored", "native-tls-alpn"], default-features = false }
 reqwest-middleware = "0.4.1"
 resvg = "0.32.0"
 rkyv = "0.8.10"

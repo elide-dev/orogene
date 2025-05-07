@@ -102,6 +102,7 @@ use directories::ProjectDirs;
 use is_terminal::IsTerminal;
 use kdl::{KdlDocument, KdlNode, KdlValue};
 use miette::{IntoDiagnostic, Result};
+use tracing::instrument;
 use oro_config::{OroConfig, OroConfigLayerExt, OroConfigOptions};
 use tracing_appender::non_blocking::WorkerGuard;
 use tracing_subscriber::{
@@ -125,6 +126,7 @@ mod commands;
 mod error;
 mod nassun_args;
 
+#[cfg(feature = "tracing")]
 const MAX_RETAINED_LOGS: usize = 5;
 
 #[derive(Debug, Parser)]
@@ -313,13 +315,8 @@ pub struct Orogene {
 }
 
 impl Orogene {
-    #[cfg(not(feature = "tracing"))]
-    fn setup_logging(&self, _log_file: Option<&Path>) -> Result<Option<WorkerGuard>> {
-        Ok(None)
-    }
-
     #[cfg(feature = "tracing")]
-    fn setup_logging(&self, log_file: Option<&Path>) -> Result<Option<WorkerGuard>> {
+    pub fn setup_logging(&self, log_file: Option<&Path>) -> Result<Option<WorkerGuard>> {
         let builder = EnvFilter::builder();
         let filter = if self.quiet {
             builder
@@ -732,8 +729,8 @@ impl Orogene {
         .await
     }
 
-    pub async fn init_and_run(command: Command, args: Vec<OsString>) -> Result<()> {
-        let start = Instant::now();
+    #[instrument]
+    pub fn init_oro(command: &Command, args: &Vec<OsString>) -> Orogene {
         // We have to instantiate Orogene twice: once to pick up "base" config
         // options, like `root` and `config`, which affect our overall config
         // parsing, and then a second time to pick up config options from the
@@ -741,11 +738,23 @@ impl Orogene {
         // because what we really need to apply the negations to is the
         // subcommand we're interested in.
         let matches = command.clone().get_matches_from(args.clone());
-        let oro = Orogene::from_arg_matches(&matches).expect("Failed to match args");
+        Orogene::from_arg_matches(&matches).expect("Failed to match args")
+    }
+
+    #[instrument]
+    pub async fn run_oro(command: Command, args: Vec<OsString>, oro: Orogene) -> Result<()> {
+        let start = Instant::now();
         let config = oro.build_config()?;
         Self::entry(start, oro, config, command, args).await
     }
 
+    #[instrument]
+    pub async fn init_and_run(command: Command, args: Vec<OsString>) -> Result<()> {
+        let oro = Self::init_oro(&command, &args);
+        Self::run_oro(command, args, oro).await
+    }
+
+    #[instrument]
     pub async fn entry(
         start: Instant,
         mut oro: Orogene,
@@ -837,6 +846,7 @@ fn log_file_name() -> PathBuf {
     PathBuf::from(format!("{}-0.log", prefix))
 }
 
+#[cfg(feature = "tracing")]
 fn clean_old_logs(logs_dir: &Path) -> Result<()> {
     if let Ok(readdir) = logs_dir.read_dir() {
         let mut logs = readdir.filter_map(|e| e.ok()).collect::<Vec<_>>();
