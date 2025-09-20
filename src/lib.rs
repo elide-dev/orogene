@@ -102,8 +102,8 @@ use directories::ProjectDirs;
 use is_terminal::IsTerminal;
 use kdl::{KdlDocument, KdlNode, KdlValue};
 use miette::{IntoDiagnostic, Result};
-use tracing::instrument;
 use oro_config::{OroConfig, OroConfigLayerExt, OroConfigOptions};
+use tracing::instrument;
 use tracing_appender::non_blocking::WorkerGuard;
 use tracing_subscriber::{
     EnvFilter,
@@ -329,10 +329,7 @@ impl Orogene {
                 .filter(|s| !s.is_empty())
                 .filter_map(|s| {
                     let dir: Result<Directive, _> = s.parse();
-                    match dir {
-                        Ok(dir) => Some(dir),
-                        Err(_) => None,
-                    }
+                    dir.ok()
                 });
             let mut filter = builder.from_env_lossy();
             for directive in directives {
@@ -516,8 +513,7 @@ impl Orogene {
 
     fn first_time_setup(&mut self) -> Result<()> {
         if let Some(config_path) = self.config.clone().or_else(|| {
-            ProjectDirs::from("", "", "orogene")
-                .map(|p| p.config_dir().to_owned().join("oro.kdl"))
+            ProjectDirs::from("", "", "orogene").map(|p| p.config_dir().to_owned().join("oro.kdl"))
         }) {
             let config_dir = config_path.parent().expect("must have parent");
             if !config_dir.exists() {

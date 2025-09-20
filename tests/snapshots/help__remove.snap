@@ -53,7 +53,7 @@ Whether to skip restoring packages into `node_modules` and just resolve the tree
 
 Make the resolver error if the newly-resolved tree would defer from an existing lockfile
 
-\[aliases: frozen]
+\[aliases: --frozen]
 
 #### `--no-scripts`
 
@@ -198,5 +198,3 @@ Can also be configured through the `NO_PROXY` environment variable, like `NO_PRO
 How many times to retry failed network operations
 
 \[default: 2]
-
-
