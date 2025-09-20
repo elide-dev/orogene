@@ -83,7 +83,7 @@ tracing = []
 
 [workspace.dependencies]
 anyhow = "1.0.96"
-async-compression = "0.4.30"
+async-compression = "0.4.12"
 async-process = "2.3.0"
 async-std = "1.13.0"
 async-trait = "0.1.86"
